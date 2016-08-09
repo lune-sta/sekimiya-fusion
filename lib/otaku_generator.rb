@@ -38,10 +38,10 @@ class OtakuGenerator < Image
 
     new_otaku = new_otaku.resample_bilinear(size, size)
 
-    back_ground_pixels = get_close_color_pixels(new_otaku, 0, 0, range:10)
+    back_ground_pixels = get_close_color_pixels(new_otaku, 0, 0, range:0)
     new_otaku = transparent(new_otaku, back_ground_pixels)
 
     new_otaku
   end
-  
+
 end
