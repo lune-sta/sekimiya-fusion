@@ -3,9 +3,10 @@ require 'rmagick'
 require 'chunky_png'
 require 'AnimeFace'
 
+require_relative './image'
 require_relative './otaku_generator'
 
-class Collage
+class Collage < Image
 
 
   def initialize(otaku_gen, img, faces)
@@ -38,7 +39,10 @@ class Collage
 
       (0...otaku.width).each do |y|
         (0...otaku.height).each do |x|
+          next unless in_area?(new_img, otaku_face_area[:x] + x, otaku_face_area[:y] + y) ## 描写範囲外ならskip
+
           next if corner_noise?(otaku, x, y) ## すみっこの白いギザギザ対策
+
           new_img.compose_pixel(otaku_face_area[:x] + x, otaku_face_area[:y] + y, otaku.get_pixel(x, y))
         end
       end
@@ -48,6 +52,8 @@ class Collage
   end
 
 
+  private
+  
   def corner_noise?(img, x, y)
     rgb = rgb(img.get_pixel(x, y))
     return false unless close_white?(rgb)
@@ -66,30 +72,10 @@ class Collage
   end
 
 
-  def close_white?(rgb)
-    ## 白に近いか？
-    rgb[:r] + rgb[:g] + rgb[:b] > 500
-  end
-
-
   def facing_left?(face)
     ## 左を向いているか？
     center = face['face']['x'] + face['face']['width']/2
     face['nose']['x'] < center
   end
 
-
-  def rgb(i)
-    {:r => ChunkyPNG::Color.r(i),
-    :g => ChunkyPNG::Color.g(i),
-    :b => ChunkyPNG::Color.b(i)}
-  end
-
-
-  def mp_to_rgb(magick_pixel)
-    arr = magick_pixel.to_s.split(', ').map{|a| a.split('=')[1]}
-    {:r=> arr[0].to_i,
-    :g=> arr[1].to_i,
-    :b=> arr[2].to_i}
-  end
 end
