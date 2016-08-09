@@ -12,9 +12,10 @@ https://twitter.com/sekimiya_fusion
 
 2. ```docker build -t sekimiya_fusion .```
 
-3. ```docker run --rm -it sekimiya-fusion```
+3. ```docker run --rm -it sekimiya-fusion```  
+  (バックグラウンドで動かす時は ```docker run --rm -d sekimiya-fusion```)
 
-Dockerで動かさない場合はAnimeFace(Ruby版)をインストールする必要があります。
+Dockerで動かさない場合は手動でAnimeFace(Ruby版)をインストールする必要があります。
 http://ultraist.hatenablog.com/entry/20110426/1303836863
 
 ## License
